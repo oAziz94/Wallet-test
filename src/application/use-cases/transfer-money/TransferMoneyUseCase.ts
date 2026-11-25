@@ -1,6 +1,3 @@
-// USE CASES (red circle)
-// Orchestrates the entities. Depends only on the Domain + the repository interface.
-
 import { IAccountRepository } from "../../interfaces/IAccountRepository";
 import { TransferMoneyCommand } from "./TransferMoneyCommand";
 
@@ -18,7 +15,7 @@ export class TransferMoneyUseCase {
     const to = await this.accounts.findById(toAccountId);
     if (!from || !to) throw new Error("Account not found");
 
-    from.withdraw(amount); // business rules live in the entity
+    from.withdraw(amount);
     to.deposit(amount);
 
     await this.accounts.save(from);

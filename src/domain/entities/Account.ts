@@ -4,7 +4,8 @@ export class Account {
     private _balance: number,
     private _isActive: boolean = true,
   ) {
-    if (!Number.isFinite(_balance)) throw new Error("Balance must be a valid number");
+    if (!Number.isFinite(_balance))
+      throw new Error("Balance must be a valid number");
     if (_balance < 0) throw new Error("Balance cannot be negative");
   }
 

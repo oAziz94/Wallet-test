@@ -16,7 +16,7 @@ const transferController = new TransferController(transferMoney);
 const app = express();
 app.use(express.json());
 
-app.post("/transfer", transferController.handle);
+app.post("/transfer", transferController.postTransfer);
 
 app.get("/accounts", async (_req, res) => {
   const accounts = await accountRepo.findAll();
