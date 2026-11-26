@@ -1,8 +1,6 @@
 # Wallet App
 
-I made this to practice Clean Architecture. The original example was done in .NET, so I rebuilt it in TypeScript to make sure I actually understood it and wasn't just copying it.
-
-It's intentionally tiny. There's one entity (an account) and one use case (transferring money between two accounts). There's no real database either, everything is kept in memory and resets when you restart the server.
+I made this to practice Clean Architecture. There's one entity (an account) and one use case (transferring money between two accounts). There's no real database either, everything is kept in memory and resets when you restart the server.
 
 ## Running it
 
@@ -28,7 +26,7 @@ There are four layers, and the main rule is that a layer only imports from itsel
 
 This is the center and it doesn't import anything. `Account` has an `id`, a `balance` and an `isActive` flag.
 
-I put all the money rules in here on purpose:
+I put all the money rules in here:
 
 - you can't create an account with a negative (or NaN) balance
 - `withdraw()` and `deposit()` only accept positive amounts
@@ -55,9 +53,7 @@ Imports: `IAccountRepository` imports `Account`. The use case imports the interf
 
 The actual storage, which is just a `Map`. It implements `IAccountRepository`, so it imports that interface plus `Account`.
 
-This is the part that clicked for me. The data goes out to storage, but the import points inward, because this class depends on an interface owned by the application layer. If I wanted Postgres later, I'd write another class that implements the same interface, and the use case wouldn't change at all.
-
-It also has a `findAll()` that only the `GET /accounts` route uses.
+This is the part that clicked for me. The data goes out to storage, but the import points inward, because this class depends on an interface owned by the application layer. If I wanted Postgres later, I'd write another class that implements the same interface, and the use case wouldn't change at all. Then if for example afterwards I want to switch to Mongodb so create another class that implements the same interface.
 
 ### Presentation
 
@@ -69,7 +65,7 @@ Reads the request body, turns it into a command and calls the use case. It impor
 
 Everything gets wired together here: create the repo, pass it to the use case, pass the use case to the controller, register the routes. It's the only file that imports from every layer, which is fine because that's its whole job.
 
-## What happens when you transfer
+## What happens when the user press the transfer button
 
 1. Express gets `POST /transfer` and calls `TransferController.postTransfer()`
 2. the controller pulls `fromAccountId`, `toAccountId` and `amount` from the body and calls `TransferMoneyUseCase.execute()`
